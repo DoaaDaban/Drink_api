@@ -11,7 +11,7 @@ server.use(express.json());
 const PORT=process.env.PORT
 
 const mongoose = require('mongoose');
-mongoose.connect(`${process.env.MONGO_DB}`, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/drinkDBB', {useNewUrlParser: true, useUnifiedTopology: true});
 
 
 //============================================================2=======================================================
@@ -91,6 +91,9 @@ mongoose.connect(`${process.env.MONGO_DB}`, {useNewUrlParser: true, useUnifiedTo
 // server.listen(PORT,()=>{
 //     console.log(`listning on port ${PORT}`)
 // })
+
+
+
 
 
 //====================================================================1================================================
