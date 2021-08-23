@@ -11,8 +11,89 @@ server.use(express.json());
 const PORT=process.env.PORT
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/drinkDBB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`${process.env.MONGO_DB}`, {useNewUrlParser: true, useUnifiedTopology: true});
 
+
+//============================================================2=======================================================
+// const drinkSchema= new mongoose.Schema({
+//     drinkName: String,
+//     drinkImg: String
+// })
+
+// const ownerSchema= new mongoose.Schema({
+//     userEmail: String,
+//     drinks: [drinkSchema],
+// })
+
+// const ownerModel= mongoose.model('drinkss', ownerSchema);
+
+
+// //Routes
+
+// // http://localhost:3008/
+// // server.get('/test', testHandler);
+
+// server.get(`/getAllDrinks`, getAllDrinksHandler);
+// server.post(`/addDrinksR`, addDrinksHandler);
+// server.get(`/getFavDrinksR`, getFavDrinksHandler);
+// // server.delete(`/deletDinksR/:idx`, deletdrinksHandler);
+// // server.put(`/updateDrinks/:idx`, updateDrinksHandler);
+
+
+
+// // handlers
+
+// // http://localhost:3008/getAllDrinks
+// function getAllDrinksHandler(req,res){
+// const URL=`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic`
+//     axios
+//     .get(URL)
+//     .then(result => {
+//        res.send(result.data.drinks);
+//     })
+// }
+
+// // http://localhost:3008/addDrinksR
+// function addDrinksHandler(req,res){
+//   const {userEmail, drinkObj} = req.body;
+
+//   ownerModel.findOne({userEmail: userEmail}, (err, result)=>{
+//         if(!result){
+//             const newOwner= new ownerModel({
+//                 userEmail: userEmail,
+//                 drinks: [drinkObj]
+//             })
+//             newOwner.save();
+//         }else {
+//             result.drinks.unshift(drinkObj);
+//             result.save();
+//         }      
+//     })
+
+// }
+
+// // http://localhost:3008/getFavDrinksR
+// function getFavDrinksHandler(req,res){
+//     const {userEmail} = req.query;
+
+//     ownerModel.findOne({userEmail:userEmail}, (err, result)=>{
+//        res.send(result.drinks);
+//     })
+
+// }
+
+
+// // function testHandler(req,res){
+// //     res.send('hello f RR')
+// // }
+
+
+// server.listen(PORT,()=>{
+//     console.log(`listning on port ${PORT}`)
+// })
+
+
+//====================================================================1================================================
 const drinkSchema = new mongoose.Schema({
     drinkName: String,
     drinkImg: String,
@@ -33,7 +114,7 @@ server.get('/test',testHandler);
 // http://localhost:3008/getallDrinks
 server.get('/getallDrinks', getallDrinksHandler);
 
-// add data to database
+// serve frontend by add data to database
 //http://localhost:3008/addDrink
 server.post('/addDrink', addDrinkHandler);
 
@@ -51,7 +132,6 @@ server.put('/updateDrinkR/:idx', updatDrinkHandler);
 
 
 // handlers
-
 function updatDrinkHandler(req,res){
     const {idx} = req.params;
     const {userEmail, drinkObj} = req.body; // drinkObj === (drinkName + drinkImg) jdad
@@ -111,27 +191,26 @@ function getFavDrinkHandler(req,res){
     })
   }
 
-// send fav to database
+// add fav to database
 function addDrinkHandler(req,res){
     const {userEmail, drinkObj} = req.body;
 
     ownerModel.findOne({userEmail: userEmail},(err,result)=>{
-        if (err) console.log(err)
-        else if (!result){ // not same user
+        // if (err) console.log(err)
+         if (!result){ // not same user
             const newOwner=new ownerModel({
                 userEmail: userEmail,
                 drinks: [drinkObj],
             })
             newOwner.save();
-            console.log('in if else', result)
+            //console.log('in if else', result)
         }else {
             result.drinks.unshift(drinkObj); // unshift mtl push bs bdef 3 awl l array
             result.save();
-            console.log('in else', result)
+            // console.log('in else', result)
         }
     })
 }
-
 
 
 function getallDrinksHandler(req,res){
